@@ -284,13 +284,15 @@ h1, h2, h3, h4, h5, h6 {
   #fh5co-home, #fh5co-home .text-wrap {
     height: 500px;
   }
+  #fh5co-home .text-wrap {
+    margin-top: -20vh;
+  }
 }
 #fh5co-home .text-wrap {
   display: table;
   width: 100%;
   position: relative;
   z-index: 4;
-  margin-top: -20vh;
 }
 .rays-container {
   z-index: 1000;
