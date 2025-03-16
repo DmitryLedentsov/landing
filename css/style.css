@@ -292,6 +292,14 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 4;
   margin-top: -20vh;
 }
+.rays-container {
+  z-index: 1000;
+}
+
+.code-ray {
+  position: absolute;
+  white-space: nowrap;
+}
 #fh5co-home .text-inner {
   display: table-cell;
   vertical-align: middle;

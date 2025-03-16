@@ -441,6 +441,122 @@
 		}
 	};
 
+
+	var initLogoClickAnimation = function(){
+		//if(isMobile.any()) return;
+		let isAnimating = false;
+    	let activeRaysContainer = null;
+
+    	function debounce(func, wait) {
+    	    let timeout;
+    	    return function executedFunction(...args) {
+    	        const later = () => {
+    	            clearTimeout(timeout);
+    	            func(...args);
+    	        };
+    	        clearTimeout(timeout);
+    	        timeout = setTimeout(later, wait);
+    	    };
+    	}
+
+    	$('#logo').on('click', debounce(function(e) {
+    	    if (isAnimating) {
+    	        if (activeRaysContainer) {
+    	            activeRaysContainer.stop(true, true).remove();
+    	            activeRaysContainer = null;
+    	        }
+    	        isAnimating = false;
+    	    }
+
+    	    let img =  $('#logo');
+
+    	    function startAnimation() {
+    	        let imgWidth = img.width();
+    	        let imgHeight = img.height();
+    	        let offset = img.offset();
+
+    	        // Проверяем, существует ли offset
+    	        if (!offset || typeof offset.left === 'undefined' || typeof offset.top === 'undefined') {
+    	            console.warn('Не удалось получить позицию элемента #logo. Возможно, он не виден в DOM.');
+    	            return; // Прерываем выполнение, если offset недоступен
+    	        }
+
+    	        let centerX = imgWidth / 2;
+    	        let centerY = imgHeight / 2;
+
+    	        activeRaysContainer = $('<div class="rays-container"></div>');
+    	        activeRaysContainer.css({
+    	            position: 'absolute',
+    	            left: offset.left + centerX + 'px',
+    	            top: offset.top + centerY + 'px',
+    	            'pointer-events': 'none',
+    	            'z-index': 1000
+    	        });
+
+    	        $('body').append(activeRaysContainer);
+    	        isAnimating = true;
+
+    	        let codeSnippets = [
+    	            'function() {',
+    	            'console.log("xAI");',
+    	            'let x = 42;',
+    	            'return true;',
+    	            'if (condition) {',
+    	            'const PI = 3.14;'
+
+    	        ];
+
+    	        for (let i = 0; i < 12; i++) {
+    	            let angle = (i * 30);
+    	            let $ray = $('<div class="code-ray"></div>');
+				
+    	            let randomCode = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+				
+    	            $ray.text(randomCode);
+    	            $ray.css({
+    	                position: 'absolute',
+    	                transform: `rotate(${angle}deg)`,
+    	                transformOrigin: '0 0',
+    	                width: '150px',
+    	                color: '#ff0000',
+    	                fontFamily: 'monospace',
+    	                fontSize: '14px',
+    	                opacity: 0,
+    	                textShadow: '0 0 5px rgba(255, 0, 0, 0.5)'
+    	            });
+
+    	            activeRaysContainer.append($ray);
+
+    	            $ray.animate({
+    	                opacity: 1,
+    	                left: Math.cos(angle * Math.PI / 180) * 100,
+    	                top: Math.sin(angle * Math.PI / 180) * 100
+    	            }, 500)
+    	            .animate({
+    	                opacity: 0
+    	            }, 1000, function() {
+    	                $(this).remove();
+    	                if (activeRaysContainer && activeRaysContainer.children().length === 0) {
+    	                    activeRaysContainer.remove();
+    	                    activeRaysContainer = null;
+    	                    isAnimating = false;
+    	                }
+    	            });
+    	        }
+    	    }
+
+    	    if (img.is('img')) {
+    	        if (img[0].complete) {
+    	            startAnimation();
+    	        } else {
+    	            img.one('load', startAnimation); // Используем .one вместо .on для одноразового события
+    	        }
+    	    } else {
+    	        startAnimation();
+    	    }
+    	}, 100));
+	}
+
 	// Document on load.
 	$(function(){
 		parallax();
@@ -460,6 +576,7 @@
 		counter();
 		counterWayPoint();
 
+		initLogoClickAnimation();
 	});
 
 
