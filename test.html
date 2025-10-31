@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShhhStudio — работаем по-тихому</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #080808;
+            --bg-block: #111;
+            --text-light: #eee;
+            --text-dim: #888;
+            --accent: #8C7676;
+            --border: rgba(136, 136, 136, 0.2);
+        }
+
+        html {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', -apple-system, sans-serif;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .symbol {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            grid-column: span 2;
+        }
+
+        .symbol::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: var(--text-light);
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        .tagline {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            grid-column: span 4;
+            text-transform: uppercase;
+        }
+
+        .mode-toggle {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .mode-toggle:hover {
+            opacity: 1;
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-auto-rows: 200px;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .grid-item {
+            background-color: var(--bg-block);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .grid-item:hover {
+            background-color: #1a1a1a;
+        }
+
+        .grid-item::before {
+            content: attr(data-label);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .grid-item:hover::before {
+            opacity: 1;
+        }
+
+        .grid-item h2 {
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .grid-item p {
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--text-dim);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .grid-item.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .grid-item.wide {
+            grid-column: span 3;
+        }
+
+        .grid-item.tall {
+            grid-row: span 2;
+        }
+
+        .grid-item.hero {
+            grid-column: span 6;
+            grid-row: span 3;
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            justify-content: flex-start;
+            padding: 60px 40px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            max-width: 600px;
+        }
+
+        .icon-block {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        /* Team Cards */
+        .team-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            padding: 30px;
+        }
+
+        .team-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .team-card .role {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        .team-card p {
+            text-align: left;
+            max-width: 100%;
+            font-size: 12px;
+        }
+
+        /* Pricing */
+        .price-tag {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .price-desc {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Contact Section */
+        .contact-btn {
+            background-color: var(--accent);
+            color: var(--text-light);
+            padding: 16px 32px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        .contact-btn:hover {
+            background-color: #9d8484;
+        }
+
+        /* Light Mode */
+        .light-mode {
+            --bg-dark: #eee;
+            --bg-block: #fff;
+            --text-light: #111;
+            --text-dim: #666;
+            --border: rgba(17, 17, 17, 0.1);
+        }
+
+        .light-mode .symbol::before {
+            background-color: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: auto;
+            }
+
+            .grid-item,
+            .grid-item.large,
+            .grid-item.wide,
+            .grid-item.tall,
+            .grid-item.hero {
+                grid-column: span 1 !important;
+                grid-row: span 1 !important;
+                min-height: 200px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .header {
+                grid-template-columns: 1fr;
+            }
+
+            .symbol,
+            .tagline {
+                grid-column: span 1;
+            }
+        }
+
+        /* Numbers/Stats */
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-toggle" onclick="toggleMode()">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path fill="currentColor" fill-rule="evenodd" d="M12 18V6a6 6 0 1 0 0 12Zm0-14a8 8 0 1 1 0 16 8 8 0 0 1 0-16Z" clip-rule="evenodd"/>
+        </svg>
+    </div>
+
+    <header class="header">
+        <div class="symbol">ShhhStudio</div>
+        <div class="tagline">работаем по-тихому. без бюрократии, договоров и налогов.</div>
+    </header>
+
+    <div class="grid">
+        <!-- Hero -->
+        <div class="grid-item hero" data-label="О нас">
+            <h1>Разработка<br>без границ</h1>
+            <p class="subtitle">Молодая команда программистов из ИТМО. Коммерческий опыт, специализация в веб и мобильной разработке.</p>
+            <button class="contact-btn" onclick="window.open('https://t.me/dimka_228', '_blank')">Связаться</button>
+        </div>
+
+        <!-- Features -->
+        <div class="grid-item large" data-label="Преимущество">
+            <div class="icon-block">₽</div>
+            <h2>Ниже рынка</h2>
+            <p>Без переплат за офисы и бюрократию. Только работа.</p>
+        </div>
+
+        <div class="grid-item tall" data-label="Процесс">
+            <div class="icon-block">⚡</div>
+            <h2>Без оформления</h2>
+            <p>Оплата поэтапно. Криптовалюта или переводом.</p>
+        </div>
+
+        <div class="grid-item" data-label="Поддержка">
+            <div class="icon-block">24</div>
+            <h2>24/7</h2>
+            <p>Поддержка после запуска</p>
+        </div>
+
+        <div class="grid-item wide" data-label="Подход">
+            <h2>Под ключ</h2>
+            <p>От архитектуры до деплоя. Работаем с любым легаси. Выбираем оптимальные технологии.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid-item" data-label="Статистика">
+            <div class="stat-number">234</div>
+            <div class="stat-label">Клиентов</div>
+        </div>
+
+        <div class="grid-item" data-label="Статистика">
+            <div class="stat-number">6.5K</div>
+            <div class="stat-label">Проектов</div>
+        </div>
+
+        <div class="grid-item" data-label="Статистика">
+            <div class="stat-number">8.7K</div>
+            <div class="stat-label">Завершено</div>
+        </div>
+
+        <!-- Projects -->
+        <div class="grid-item large" data-label="Проект">
+            <h2>cdaem.ru</h2>
+            <p>Новый сайт для аренды жилья посуточно. Современный стек, адаптивный дизайн.</p>
+        </div>
+
+        <div class="grid-item large" data-label="Проект">
+            <h2>Lets Together</h2>
+            <p>Социальная сеть для совместных спортивных активностей. React Native, Firebase.</p>
+        </div>
+
+        <div class="grid-item wide" data-label="Проект">
+            <h2>MasCom Template</h2>
+            <p>Корпоративный шаблон с CMS интеграцией и админ-панелью</p>
+        </div>
+
+        <!-- Team -->
+        <div class="grid-item large team-card" data-label="Команда">
+            <h3>@dimka_228</h3>
+            <div class="role">Founder, Lead Dev</div>
+            <p>Опыт веб-разработки на стартапах и галерах. Руководство проектами, поиск заказчиков.</p>
+        </div>
+
+        <div class="grid-item large team-card" data-label="Команда">
+            <h3>@PotatoCoder228</h3>
+            <div class="role">Low Level Dev</div>
+            <p>Специализация: Linux, C, C++. Программирование контроллеров, дронов, железа.</p>
+        </div>
+
+        <div class="grid-item large team-card" data-label="Команда">
+            <h3>LevitCode</h3>
+            <div class="role">Full Stack Dev</div>
+            <p>Большой опыт с фронтенд фреймворками. React, Vue, Angular.</p>
+        </div>
+
+        <!-- Pricing Examples -->
+        <div class="grid-item tall" data-label="Примеры цен">
+            <div class="price-tag">$500</div>
+            <h2>Landing Page</h2>
+            <p class="price-desc">Адаптивный дизайн, SEO</p>
+        </div>
+
+        <div class="grid-item tall" data-label="Примеры цен">
+            <div class="price-tag">$2K</div>
+            <h2>Web App</h2>
+            <p class="price-desc">Full Stack, Database</p>
+        </div>
+
+        <div class="grid-item tall" data-label="Примеры цен">
+            <div class="price-tag">$5K</div>
+            <h2>Mobile App</h2>
+            <p class="price-desc">iOS + Android</p>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="grid-item wide" data-label="Технологии">
+            <h2>Стек</h2>
+            <p>React • Vue • Node.js • Python • PostgreSQL • MongoDB • Docker • AWS • React Native</p>
+        </div>
+
+        <!-- Contact -->
+        <div class="grid-item large" data-label="Контакты">
+            <h2>Telegram</h2>
+            <p>@dimka_228<br>Любые вопросы и предложения</p>
+            <button class="contact-btn" onclick="window.open('https://t.me/dimka_228', '_blank')">Написать</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+
+        // Grid auto-sizing
+        function adjustGrid() {
+            const grid = document.querySelector('.grid');
+            if (window.innerWidth > 768) {
+                const columns = window.getComputedStyle(grid)
+                    .getPropertyValue('grid-template-columns')
+                    .trim()
+                    .split(/\s+/);
+                const columnWidth = columns[0];
+                grid.style.gridAutoRows = columnWidth;
+            }
+        }
+
+        adjustGrid();
+        window.addEventListener('resize', adjustGrid);
+    </script>
+</body>
+</html>
