@@ -358,64 +358,68 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: 40px;
 }
 
+ /* Новые стили для компактной сетки проектов */
+ .fh5co-project .project-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+@media screen and (min-width: 768px) {
+  .fh5co-project .project-container {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .fh5co-project .project-container {
+      grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .fh5co-project .project-grid {
   width: 100%;
-  height: 800px;
+  height: 300px;
   background-size: cover;
   background-position: center center;
   position: relative;
-  margin-bottom: 30px;
-  display: table;
+  margin-bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-@media screen and (max-width: 768px) {
-  .fh5co-project .project-grid {
-    height: 400px;
-  }
+
+.fh5co-project .project-grid:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(140, 118, 118, 0.3);
 }
+
 .fh5co-project .project-grid .desc {
   position: relative;
-  display: table-cell;
-  vertical-align: middle;
   width: 100%;
-  height: 250px;
-  background: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  -webkit-transition: 0.3s;
-  -o-transition: 0.3s;
-  transition: 0.3s;
+  height: auto;
+  min-height: 100px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7), transparent);
+  opacity: 1;
+  padding: 20px;
+  transition: background 0.3s ease;
 }
-@media screen and (max-width: 768px) {
-  .fh5co-project .project-grid .desc {
-    opacity: 1;
-  }
+
+.fh5co-project .project-grid:hover .desc {
+  background: rgba(0, 0, 0, 0.85);
 }
+
 .fh5co-project .project-grid .desc h3 {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  font-size: 18px;
 }
-.fh5co-project .project-grid .desc h3 a {
-  color: #fff;
-}
-.fh5co-project .project-grid .desc h3 a:hover, .fh5co-project .project-grid .desc h3 a:focus {
-  text-decoration: none;
-}
+
 .fh5co-project .project-grid .desc span {
   font-size: 12px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 2px;
-}
-.fh5co-project .project-grid .desc p {
-  padding: 0;
-}
-.fh5co-project .project-grid .desc p a {
-  padding: 0;
-  color: #fff;
-}
-.fh5co-project .project-grid .desc p a:hover, .fh5co-project .project-grid .desc p a:focus {
-  text-decoration: none;
-}
-.fh5co-project .project-grid:hover .desc {
-  opacity: 1;
+  line-height: 1.4;
 }
 
 .getting-started {
