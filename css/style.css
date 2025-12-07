@@ -524,7 +524,14 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
   margin: 0;
   list-style: none;
-  text-align: center;
+  text-align: left;
+  font-size: 16px;
+}
+
+#fh5co-pricing .pricing-info li::before {
+  content: "✔"; /* Unicode for a solid bullet, followed by a space */
+  font-weight: bold;
+  margin-right: 5px; /* Add space between bullet and text */
 }
 
 .core-features {
